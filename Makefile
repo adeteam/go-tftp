@@ -9,6 +9,7 @@ SRC_MAIN_DIR=${SRC_BASE}/main
 BINARY=go-tftp
 BIN_DIR=${SRC_BASE}/build
 GOARCH=amd64
+CGO_ENABLED=0
 
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS = -ldflags "-s -w"
@@ -24,7 +25,7 @@ ready:
 
 linux: 
 	cd ${SRC_MAIN_DIR}; \
-	GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o ${BIN_DIR}/${BINARY}-linux-${GOARCH} . ; \
+	GOOS=linux GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} go build ${LDFLAGS} -o ${BIN_DIR}/${BINARY}-linux-${GOARCH} . ; \
 	cd - >/dev/null
 
 clean:

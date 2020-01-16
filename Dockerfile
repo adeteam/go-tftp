@@ -1,4 +1,14 @@
-FROM alpine:3
+FROM golang:alpine3.11
 
-RUN apk add curl
-RUN curl https://github.com/vcabbage/go-tftp/archive/v1.0.0.zip --output /tmp/v1.0.0.zip
+ADD . /tmp/go-tftp
+
+# install and build
+RUN apk add make
+RUN cd /tmp/go-tftp && make
+RUN mv /tmp/go-tftp/build/go-tftp-linux-amd64 /usr/sbin/go-tftp && chmod a+x /usr/sbin/go-tftp
+
+# cleanup and remove unuse packages
+RUN apk del make
+RUN rm -rf /go && rm -rf /usr/local/go
+
+CMD ["/usr/sbin/go-tftp", "--port", "69", "--path", "/var/lib/tftpboot"]
